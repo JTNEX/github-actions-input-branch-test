@@ -1,4 +1,4 @@
-name: "Test 05 - Extra Input (main baseline)"
+name: "Test 05 - Extra Input (feature adds input)"
 
 on:
   workflow_dispatch:
@@ -7,7 +7,12 @@ on:
         description: "main と feature 両方にある input"
         required: false
         type: string
-        default: "from-main-yaml"
+        default: "from-feature-yaml"
+      feature_only_input:
+        description: "feature ブランチにだけ存在する input（UI に出るか？）"
+        required: false
+        type: string
+        default: "from-feature-yaml"
 
 jobs:
   report:
@@ -23,7 +28,7 @@ jobs:
           echo "[INPUT] feature_only_input   => '${{ inputs.feature_only_input }}'"
           echo ""
           echo "[FILE] inputs defined in this branch's YAML:"
-          sed -n '/^on:/,/^jobs:/p' .github/workflows/test-extra-input.yml | head -n 20
+          sed -n '/^on:/,/^jobs:/p' .github/workflows/test-extra-input.yml | head -n 25
           echo ""
           if [ -z '${{ inputs.feature_only_input }}' ]; then
             echo "VERDICT | feature_only_input_received=NO (empty or not sent)"
@@ -31,5 +36,5 @@ jobs:
             echo "VERDICT | feature_only_input_received=YES value='${{ inputs.feature_only_input }}'"
           fi
           echo ""
-          echo "HINT | feature ブランチでは feature_only_input が YAML にあるが UI に出るかは手動確認"
-          echo "HINT | gh workflow run で -f feature_only_input=cli-value を付ければ実行時は渡せる"
+          echo "VERDICT | yaml_has_feature_only_input=YES"
+          echo "HINT | UI に feature_only_input が無くても CLI -f で渡せば YES になる"
