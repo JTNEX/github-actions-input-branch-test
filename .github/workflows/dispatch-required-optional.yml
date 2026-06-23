@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       required_name:
-        description: "required string - UI で空だと実行不可のはぁE
+        description: "required string - UI で空だと実行不可のはず"
         required: true
         type: string
       optional_with_default:
@@ -13,7 +13,7 @@ on:
         type: string
         default: "BRANCH_B_DEFAULT"
       optional_no_default:
-        description: "optional without default - 空で実行できるはぁE
+        description: "optional without default - 空で実行できるはず"
         required: false
         type: string
       optional_choice:
