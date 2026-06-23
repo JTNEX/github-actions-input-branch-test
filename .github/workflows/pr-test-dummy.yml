@@ -10,9 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Main dummy version
+      - name: Feature enhanced version
         run: |
-          echo "VERSION=MAIN_DUMMY"
-          echo "This is the placeholder workflow on main."
+          echo "VERSION=FEATURE_ENHANCED"
+          echo "This is the ENHANCED workflow from feature branch."
           echo "ref_name=${{ github.ref_name }}"
           head -n 6 .github/workflows/pr-test-dummy.yml
