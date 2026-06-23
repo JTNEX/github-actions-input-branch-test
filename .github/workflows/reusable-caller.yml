@@ -29,3 +29,20 @@ jobs:
       message: ${{ inputs.callee_message }}
       flag: ${{ inputs.callee_flag }}
       mode: ${{ inputs.callee_mode }}
+
+  caller-report:
+    needs: call-reusable
+    runs-on: ubuntu-latest
+    steps:
+      - name: "REPORT | Test04b Caller (workflow_call sender)"
+        run: |
+          echo "SUMMARY | TEST=04b | NAME=ReusableCaller | BRANCH=${{ github.ref_name }}"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo ""
+          echo "[INPUT sent to callee] message => '${{ inputs.callee_message }}'"
+          echo "[INPUT sent to callee] flag    => '${{ inputs.callee_flag }}'"
+          echo "[INPUT sent to callee] mode    => '${{ inputs.callee_mode }}'"
+          echo ""
+          echo "VERDICT | compare_with_TEST=04a_log_above"
+          echo "HINT    | この3行と 04a callee の [INPUT from caller] が一致すればOK"
+          echo "HINT    | ログ検索: SUMMARY | TEST=04b"

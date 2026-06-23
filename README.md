@@ -13,6 +13,27 @@
 | `reusable-caller.yml` | `workflow_call` 側（input 受け渡し） |
 | `pr-test-dummy.yml` | Main ダミー（PR 検証用のプレースホルダ） |
 
+## ログの読み方（grep 用）
+
+各ワークフローは **固定フォーマット** で出力します。Actions のログ検索（Ctrl+F）で次を探すと一目でわかります。
+
+| 検索キーワード | 意味 |
+|---|---|
+| `SUMMARY \| TEST=` | どのテストか・どのブランチか |
+| `VERDICT \|` | 判定結果（YES/NO や workflow_version） |
+| `[INPUT]` | 実際に渡された input 値 |
+| `[BRANCH]` | ref_name / sha など |
+| `[FILE]` | チェックアウトされたブランチの YAML 内容 |
+| `HINT \|` | 次に何を比較すればよいか |
+
+### よく使う判定
+
+```
+VERDICT | workflow_version=FEATURE_ENHANCED   ← PR で PR 側が使われた
+VERDICT | workflow_version=MAIN_DUMMY         ← main のダミーが使われた
+VERDICT | optional_with_default_matches_yaml_default=YES  ← default が YAML 通り
+```
+
 ## 検証チェックリスト
 
 ### A. workflow_dispatch の input
