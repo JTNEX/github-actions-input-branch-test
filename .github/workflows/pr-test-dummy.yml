@@ -10,18 +10,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: "REPORT | PR Test Dummy (main version)"
+      - name: "REPORT | PR Test Dummy (feature enhanced version)"
         run: |
-          echo "SUMMARY | TEST=PR | NAME=PrDummy | SOURCE=MAIN | BRANCH=${{ github.ref_name }}"
+          echo "SUMMARY | TEST=PR | NAME=PrDummy | SOURCE=FEATURE | BRANCH=${{ github.ref_name }}"
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
           echo ""
-          echo "VERDICT | workflow_version=MAIN_DUMMY"
-          echo "VERDICT | meaning=main に置いたプレースホルダ版が実行された"
+          echo "VERDICT | workflow_version=FEATURE_ENHANCED"
+          echo "VERDICT | meaning=PRブランチ側の拡張版が実行された（mainダミーではない）"
           echo "VERDICT | pr_event=$([ '${{ github.event_name }}' = pull_request ] && echo YES || echo NO)"
           echo ""
           echo "[BRANCH] ref_name => ${{ github.ref_name }}"
           echo "[FILE] pr-test-dummy.yml (先頭8行)"
           head -n 8 .github/workflows/pr-test-dummy.yml | sed 's/^/  /'
           echo ""
-          echo "HINT | PRでは FEATURE_ENHANCED が出れば PRブランチ版が使われている証拠"
-          echo "HINT | ログ検索: SUMMARY | TEST=PR または VERDICT | workflow_version="
+          echo "HINT | MAIN_DUMMY ではなく FEATURE_ENHANCED が出ていれば PR検証成功"
+          echo "HINT | ログ検索: SUMMARY | TEST=PR または VERDICT | workflow_version=FEATURE_ENHANCED"
