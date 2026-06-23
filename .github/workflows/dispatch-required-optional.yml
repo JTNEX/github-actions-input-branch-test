@@ -31,15 +31,35 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Compare inputs vs file on this branch
+      - name: "REPORT | Test02 Required vs Optional"
         run: |
-          echo "=== inputs ==="
-          echo "required_name         = '${{ inputs.required_name }}'"
-          echo "optional_with_default = '${{ inputs.optional_with_default }}'"
-          echo "optional_no_default   = '${{ inputs.optional_no_default }}' (empty = '')"
-          echo "optional_choice       = '${{ inputs.optional_choice }}'"
+          YAML_DEFAULT=$(grep -A3 'optional_with_default:' .github/workflows/dispatch-required-optional.yml | grep 'default:' | head -1 | sed 's/.*default: *"\?\([^"]*\)"\?.*/\1/')
+          ACTUAL_DEFAULT='${{ inputs.optional_with_default }}'
+
+          echo "SUMMARY | TEST=02 | NAME=RequiredOptional | BRANCH=${{ github.ref_name }}"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
           echo ""
-          echo "=== this branch's default in file ==="
-          grep -A1 "default:" .github/workflows/dispatch-required-optional.yml || true
+          echo "[INPUT] required_name          => '${{ inputs.required_name }}'  (required: UI未入力なら実行不可)"
+          echo "[INPUT] optional_with_default  => '${ACTUAL_DEFAULT}'"
+          echo "[INPUT] optional_no_default  => '${{ inputs.optional_no_default }}'  (未入力なら空文字)"
+          echo "[INPUT] optional_choice        => '${{ inputs.optional_choice }}'"
           echo ""
-          echo "ref_name = ${{ github.ref_name }}"
+          echo "[FILE] このブランチの YAML default (optional_with_default) => '${YAML_DEFAULT}'"
+          echo "[BRANCH] ref_name => ${{ github.ref_name }}"
+          echo ""
+          if [ "${ACTUAL_DEFAULT}" = "${YAML_DEFAULT}" ]; then
+            echo "VERDICT | optional_with_default_matches_yaml_default=YES"
+            echo "VERDICT | meaning=UIで未指定のためブランチのdefaultが使われた（または同じ値を手入力）"
+          else
+            echo "VERDICT | optional_with_default_matches_yaml_default=NO"
+            echo "VERDICT | meaning=手動で default 以外の値を入力した"
+          fi
+          if [ -z '${{ inputs.optional_no_default }}' ]; then
+            echo "VERDICT | optional_no_default_is_empty=YES (expected when not provided)"
+          else
+            echo "VERDICT | optional_no_default_is_empty=NO (user provided a value)"
+          fi
+          echo "VERDICT | optional_choice_value=${{ inputs.optional_choice }}"
+          echo ""
+          echo "COMPARE | main期待値=DEFAULT_FROM_YAML | branch-b期待値=BRANCH_B_DEFAULT"
+          echo "HINT    | ログ検索: SUMMARY | TEST=02 または VERDICT |"
