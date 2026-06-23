@@ -33,7 +33,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: "REPORT | Test02 Required vs Optional"
         run: |
-          YAML_DEFAULT=$(grep -A3 'optional_with_default:' .github/workflows/dispatch-required-optional.yml | grep 'default:' | head -1 | sed 's/.*default: *"\?\([^"]*\)"\?.*/\1/')
+          YAML_DEFAULT=$(head -n 30 .github/workflows/dispatch-required-optional.yml | grep -A3 'optional_with_default:' | grep 'default:' | head -1 | sed 's/.*default: *"\?\([^"]*\)"\?.*/\1/')
           ACTUAL_DEFAULT='${{ inputs.optional_with_default }}'
 
           echo "SUMMARY | TEST=02 | NAME=RequiredOptional | BRANCH=${{ github.ref_name }}"
