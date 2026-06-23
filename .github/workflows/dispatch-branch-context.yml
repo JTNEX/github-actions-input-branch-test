@@ -15,22 +15,43 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: BRANCH CONTEXT
+      - name: "REPORT | Test03 Branch Context"
         run: |
-          echo "=== manual run note ==="
-          echo "note = '${{ inputs.note }}'"
+          PR_DUMMY_MARKER=$(grep -E 'VERSION=|Main dummy|Feature enhanced' .github/workflows/pr-test-dummy.yml | head -1 || echo "unknown")
+
+          echo "SUMMARY | TEST=03 | NAME=BranchContext | BRANCH=${{ github.ref_name }} | NOTE=${{ inputs.note }}"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
           echo ""
-          echo "=== github context ==="
-          echo "event_name    = ${{ github.event_name }}"
-          echo "ref           = ${{ github.ref }}"
-          echo "ref_name      = ${{ github.ref_name }}"
-          echo "sha           = ${{ github.sha }}"
-          echo "workflow      = ${{ github.workflow }}"
-          echo "workflow_ref  = ${{ github.workflow_ref }}"
-          echo "repository    = ${{ github.repository }}"
+          echo "[INPUT] note => '${{ inputs.note }}'"
           echo ""
-          echo "=== workflow file head (proves which branch version ran) ==="
-          head -n 5 .github/workflows/dispatch-branch-context.yml
+          echo "[BRANCH] event_name   => ${{ github.event_name }}"
+          echo "[BRANCH] ref          => ${{ github.ref }}"
+          echo "[BRANCH] ref_name     => ${{ github.ref_name }}"
+          echo "[BRANCH] sha          => ${{ github.sha }}"
+          echo "[BRANCH] workflow     => ${{ github.workflow }}"
+          echo "[BRANCH] workflow_ref => ${{ github.workflow_ref }}"
           echo ""
-          echo "=== pr-test-dummy head (compare across branches) ==="
-          head -n 8 .github/workflows/pr-test-dummy.yml
+          echo "[FILE] dispatch-branch-context.yml (先頭5行)"
+          head -n 5 .github/workflows/dispatch-branch-context.yml | sed 's/^/  /'
+          echo ""
+          echo "[FILE] pr-test-dummy.yml ブランチ識別行 => ${PR_DUMMY_MARKER}"
+          echo ""
+          case "${{ github.ref_name }}" in
+            main)
+              echo "VERDICT | expected_ref_name=main | actual=${{ github.ref_name }} | match=YES"
+              echo "VERDICT | expected_pr_dummy=VERSION=MAIN_DUMMY (mainで手動実行時)"
+              ;;
+            feature/dispatch-defaults-b)
+              echo "VERDICT | expected_ref_name=feature/dispatch-defaults-b | actual=${{ github.ref_name }} | match=YES"
+              ;;
+            feature/enhanced-pr-test)
+              echo "VERDICT | expected_ref_name=feature/enhanced-pr-test | actual=${{ github.ref_name }} | match=YES"
+              echo "VERDICT | expected_pr_dummy=VERSION=FEATURE_ENHANCED"
+              ;;
+            *)
+              echo "VERDICT | ref_name=${{ github.ref_name }} (custom branch)"
+              ;;
+          esac
+          echo ""
+          echo "HINT | 2回実行して ref_name / FILE行 を比較するとブランチ差分が一目でわかる"
+          echo "HINT | ログ検索: SUMMARY | TEST=03"

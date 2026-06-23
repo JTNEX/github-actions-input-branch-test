@@ -22,10 +22,20 @@ jobs:
   callee-report:
     runs-on: ubuntu-latest
     steps:
-      - name: CALLEE INPUT REPORT
+      - name: "REPORT | Test04a Callee (workflow_call receiver)"
         run: |
-          echo "=== workflow_call inputs (callee side) ==="
-          echo "message = '${{ inputs.message }}'"
-          echo "flag    = '${{ inputs.flag }}'"
-          echo "mode    = '${{ inputs.mode }}'"
-          echo "ref_name = ${{ github.ref_name }}"
+          echo "SUMMARY | TEST=04a | NAME=ReusableCallee | BRANCH=${{ github.ref_name }}"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo ""
+          echo "[INPUT from caller] message => '${{ inputs.message }}'  (required)"
+          echo "[INPUT from caller] flag    => '${{ inputs.flag }}'"
+          echo "[INPUT from caller] mode    => '${{ inputs.mode }}'"
+          echo ""
+          echo "[BRANCH] ref_name => ${{ github.ref_name }}"
+          echo ""
+          echo "VERDICT | callee_received_message=$([ -n '${{ inputs.message }}' ] && echo YES || echo NO)"
+          echo "VERDICT | callee_flag=${{ inputs.flag }}"
+          echo "VERDICT | callee_mode=${{ inputs.mode }}"
+          echo ""
+          echo "HINT | caller (Test04b) の INPUT とここが一致すれば workflow_call 伝達OK"
+          echo "HINT | ログ検索: SUMMARY | TEST=04a"
