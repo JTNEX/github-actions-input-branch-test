@@ -4,16 +4,16 @@ on:
   workflow_dispatch:
     inputs:
       required_name:
-        description: "required string - UI で空だと実行不可のはず"
+        description: "required string - UI で空だと実行不可のはぁE
         required: true
         type: string
       optional_with_default:
         description: "optional with default"
         required: false
         type: string
-        default: "DEFAULT_FROM_YAML"
+        default: "BRANCH_B_DEFAULT"
       optional_no_default:
-        description: "optional without default - 空で実行できるはず"
+        description: "optional without default - 空で実行できるはぁE
         required: false
         type: string
       optional_choice:
