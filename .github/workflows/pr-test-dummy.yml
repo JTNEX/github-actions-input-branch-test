@@ -1,0 +1,18 @@
+name: "PR Test (Dummy on Main)"
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  placeholder:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Main dummy version
+        run: |
+          echo "VERSION=MAIN_DUMMY"
+          echo "This is the placeholder workflow on main."
+          echo "ref_name=${{ github.ref_name }}"
+          head -n 6 .github/workflows/pr-test-dummy.yml

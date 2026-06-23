@@ -1,0 +1,45 @@
+name: "Test 01 - All Input Types"
+
+on:
+  workflow_dispatch:
+    inputs:
+      text_input:
+        description: "string (required)"
+        required: true
+        type: string
+      choice_input:
+        description: "choice (required)"
+        required: true
+        type: choice
+        options:
+          - alpha
+          - beta
+          - gamma
+      bool_input:
+        description: "boolean (optional, default false when unchecked)"
+        required: false
+        type: boolean
+        default: false
+      env_input:
+        description: "environment (optional)"
+        required: false
+        type: environment
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.env_input }}
+    steps:
+      - name: INPUT REPORT
+        run: |
+          echo "=== workflow_dispatch inputs ==="
+          echo "text_input   = '${{ inputs.text_input }}'"
+          echo "choice_input = '${{ inputs.choice_input }}'"
+          echo "bool_input   = '${{ inputs.bool_input }}'"
+          echo "env_input    = '${{ inputs.env_input }}'"
+          echo ""
+          echo "=== branch context ==="
+          echo "ref       = ${{ github.ref }}"
+          echo "ref_name  = ${{ github.ref_name }}"
+          echo "sha       = ${{ github.sha }}"
+          echo "workflow_ref = ${{ github.workflow_ref }}"

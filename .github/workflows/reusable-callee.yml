@@ -1,0 +1,31 @@
+name: "Test 04a - Reusable Callee"
+
+on:
+  workflow_call:
+    inputs:
+      message:
+        description: "required message"
+        required: true
+        type: string
+      flag:
+        description: "optional boolean"
+        required: false
+        type: boolean
+        default: false
+      mode:
+        description: "optional choice"
+        required: false
+        type: string
+        default: normal
+
+jobs:
+  callee-report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: CALLEE INPUT REPORT
+        run: |
+          echo "=== workflow_call inputs (callee side) ==="
+          echo "message = '${{ inputs.message }}'"
+          echo "flag    = '${{ inputs.flag }}'"
+          echo "mode    = '${{ inputs.mode }}'"
+          echo "ref_name = ${{ github.ref_name }}"

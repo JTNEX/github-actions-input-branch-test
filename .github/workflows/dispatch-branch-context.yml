@@ -1,0 +1,36 @@
+name: "Test 03 - Branch Context"
+
+on:
+  workflow_dispatch:
+    inputs:
+      note:
+        description: "任意メモ（ログ識別用）"
+        required: false
+        type: string
+        default: "no-note"
+
+jobs:
+  branch-report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: BRANCH CONTEXT
+        run: |
+          echo "=== manual run note ==="
+          echo "note = '${{ inputs.note }}'"
+          echo ""
+          echo "=== github context ==="
+          echo "event_name    = ${{ github.event_name }}"
+          echo "ref           = ${{ github.ref }}"
+          echo "ref_name      = ${{ github.ref_name }}"
+          echo "sha           = ${{ github.sha }}"
+          echo "workflow      = ${{ github.workflow }}"
+          echo "workflow_ref  = ${{ github.workflow_ref }}"
+          echo "repository    = ${{ github.repository }}"
+          echo ""
+          echo "=== workflow file head (proves which branch version ran) ==="
+          head -n 5 .github/workflows/dispatch-branch-context.yml
+          echo ""
+          echo "=== pr-test-dummy head (compare across branches) ==="
+          head -n 8 .github/workflows/pr-test-dummy.yml

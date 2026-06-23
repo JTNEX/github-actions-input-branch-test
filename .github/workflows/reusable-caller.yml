@@ -1,0 +1,31 @@
+name: "Test 04b - Reusable Caller"
+
+on:
+  workflow_dispatch:
+    inputs:
+      callee_message:
+        description: "passed to callee as message (required)"
+        required: true
+        type: string
+      callee_flag:
+        description: "passed to callee as flag"
+        required: false
+        type: boolean
+        default: true
+      callee_mode:
+        description: "passed to callee as mode"
+        required: false
+        type: choice
+        options:
+          - normal
+          - debug
+          - strict
+        default: debug
+
+jobs:
+  call-reusable:
+    uses: ./.github/workflows/reusable-callee.yml
+    with:
+      message: ${{ inputs.callee_message }}
+      flag: ${{ inputs.callee_flag }}
+      mode: ${{ inputs.callee_mode }}

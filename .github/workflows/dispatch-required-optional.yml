@@ -1,0 +1,45 @@
+name: "Test 02 - Required vs Optional"
+
+on:
+  workflow_dispatch:
+    inputs:
+      required_name:
+        description: "required string - UI で空だと実行不可のはず"
+        required: true
+        type: string
+      optional_with_default:
+        description: "optional with default"
+        required: false
+        type: string
+        default: "DEFAULT_FROM_YAML"
+      optional_no_default:
+        description: "optional without default - 空で実行できるはず"
+        required: false
+        type: string
+      optional_choice:
+        description: "optional choice with default"
+        required: false
+        type: choice
+        options:
+          - option_a
+          - option_b
+          - option_c
+        default: option_b
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compare inputs vs file on this branch
+        run: |
+          echo "=== inputs ==="
+          echo "required_name         = '${{ inputs.required_name }}'"
+          echo "optional_with_default = '${{ inputs.optional_with_default }}'"
+          echo "optional_no_default   = '${{ inputs.optional_no_default }}' (empty = '')"
+          echo "optional_choice       = '${{ inputs.optional_choice }}'"
+          echo ""
+          echo "=== this branch's default in file ==="
+          grep -A1 "default:" .github/workflows/dispatch-required-optional.yml || true
+          echo ""
+          echo "ref_name = ${{ github.ref_name }}"
